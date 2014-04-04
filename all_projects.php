@@ -1,5 +1,9 @@
 <?php
+
+/* Connect to the database */
 include_once('../dbconnect.php');  
+
+
 /* change character set to utf8 */
 if (!mysqli_set_charset($con, "utf8")) {
     echo "Error loading character set utf8: " . mysqli_error($con);
