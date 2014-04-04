@@ -5,12 +5,7 @@ $firephp = FirePHP::getInstance(true);
 require_once('FirePHPCore/fb.php');
 ob_start();
 
-$con=mysqli_connect("localhost","ifadm","Profile09","associated_projects");
-// Check connection
-if (mysqli_connect_errno())
-  {
-  echo "Failed to connect to MySQL: " . mysqli_connect_error();
-  }
+include_once('../dbconnect.php');
  
 /* change character set to utf8 */
 if (!mysqli_set_charset($con, "utf8")) {
