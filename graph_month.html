@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" /> 
+	<title>Associated Projects graph for UMIF</title>
+
+	<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script>
+		google.load("visualization", "1", {packages:["corechart"]});
+
+		function get_graph_data(start_date, end_date, view_point_date) {
+		
+			$.ajax({
+	            type: "POST", //can be POST or GET
+	            url: "get_projects_graph_data.php",
+	            dataType: "html", //or json
+	            data: {
+						start: start_date,
+						end: end_date,
+						view_point: view_point_date
+					}, //data to send as $_POST to script
+	            success: function(response) {				
+	                //Once data received, parse
+	                var graph_data = JSON.parse(response);
+		
+					var parsed_graph_data = google.visualization.arrayToDataTable(graph_data["graph"][2]["google_charts_data"]);
+
+					var options = {
+						title: 'Infofusion/UMIF, Start date ' +  start_date + ', End date ' + end_date + ', Running projects as of ' + view_point_date,
+						vAxis: {title: 'Funds (KSEK)',  titleTextStyle: {color: 'red'}},
+						isStacked: true,
+						hAxis: {ticks: graph_data["graph"][1]["labels"]},
+						colors: ['magenta','brown', 'green','blue'],
+						
+					};
+					
+					var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+					chart.draw(parsed_graph_data, options);
+	
+	            },
+	
+	            error: function(response) {
+
+				}
+
+			}); 
+		}
+	</script>
+</head>
+<body>
+
+<article>
+	<div id="chart_div" style="width: auto; height: 500px;"></div>
+	<script>
+	google.setOnLoadCallback(get_graph_data('2005-01-01','2016-12-31','2011-11-01'));
+	</script>
+	<p>Start date: YYYY-MM-DD</p><input type="text" name="start" id="start"><br><p>End date: YYYY-MM-DD</p><input type="text" name="end" id="end"><br><p>Viewpoint date: YYYY-MM-DD</p><input type="text" name="viewpoint" id="viewpoint"><br>
+	<button onclick="get_graph_data(document.getElementById('start').value,document.getElementById('end').value,document.getElementById('viewpoint').value)">Render</button>
+</article>
+
+</body>
+</html>

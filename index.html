@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" /> 
+	<title>Associated Projects listing for UMIF</title>
+		<style>
+table tr:nth-child(4n-1), table tr:nth-child(4n)  {
+    background: #ccc;
+}
+
+	</style>
+
+	<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+	<script>
+		function my_ajax_call(selection) {
+			var data = 'selection='+selection;
+
+			$.ajax({
+	            type: "POST", //can be POST or GET
+	            url: "get_projects.php",
+	            dataType: "html", //or json
+	            data: data, //data to send as $_POST to script
+	            success: function(response) {
+	
+	                //Once data received, do this
+	                document.getElementById("project_listing").innerHTML=response;
+	
+	            },
+	
+	            error: function(response) {
+
+            }
+
+        }); 
+
+
+}
+	</script>
+</head>
+<body onload="my_ajax_call('current')">
+
+<article>
+	<header>
+		<h1>Associated Projects listing for UMIF</h1>
+	</header>
+	<section>
+		<button onclick="my_ajax_call('current')">Current Projects</button>		
+		<button onclick="my_ajax_call('past')">Past Projects</button>
+		<button onclick="my_ajax_call('all')">All Projects</button>
+	</section>
+	<section id="project_listing"></section>
+</article>
+
+</body>
+</html>
